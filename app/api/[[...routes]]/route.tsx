@@ -157,7 +157,7 @@ app.frame("/", async (c) => {
         previousState.options = 2;
       }
     } else if (previousState.state === "initial" && inputText !== "") {
-      previousState.fname = inputText;
+      previousState.fname = inputText || "";
       previousState.state = "loading";
       previousState.options = 1;
     } else {
