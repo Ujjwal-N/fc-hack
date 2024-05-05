@@ -1,0 +1,29 @@
+{
+  "name": "fc-hack",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "deploy": "vercel",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@airstack/node": "^0.0.7",
+    "frog": "latest",
+    "hono": "^4",
+    "next": "14.1.0",
+    "node-redis": "^0.1.7",
+    "react": "^18",
+    "react-dom": "^18",
+    "redis": "^4.6.13"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5",
+    "vercel": "^32.4.1"
+  }
+}
