@@ -91,10 +91,14 @@ const getFriendsData = async (fname: string) => {
 };
 
 const getTopFriends = (friendData: [any]) => {
-  return friendData
-    .slice(1, 6)
-    .map((friend: any) => friend.fname)
-    .join("\n");
+  return (
+    friendData
+      .slice(1, 8)
+      .map((friend: any) => friend.fname)
+      .join("\n") +
+    "\n" +
+    (friendData.length > 8 ? "+" + (friendData.length - 8) + " more.." : "")
+  );
 };
 
 const getAllAddresses = (friendData: [any]) =>
@@ -114,7 +118,7 @@ const currentDate = new Date();
 const lastWeekDate = new Date(
   currentDate.getFullYear(),
   currentDate.getMonth(),
-  currentDate.getDay() - 7,
+  currentDate.getDay() - 1,
   0,
   0,
   0,
@@ -183,7 +187,6 @@ app.frame("/", async (c) => {
           })
           .forEach((obj) => {
             const { tokenAddress } = obj;
-            //console.log(tokenAddress);
             nftToHolders.set(
               tokenAddress,
               (nftToHolders.get(tokenAddress) || 0) + 1
@@ -221,41 +224,171 @@ app.frame("/", async (c) => {
     image: (
       <div
         style={{
-          alignItems: "center",
-          background:
-            status === "response"
-              ? "linear-gradient(to right, #432889, #17101F)"
-              : "black",
-          backgroundSize: "100% 100%",
           display: "flex",
-          flexDirection: "column",
-          flexWrap: "nowrap",
           height: "100%",
-          justifyContent: "center",
-          textAlign: "center",
           width: "100%",
+          justifyContent: "center",
+          marginTop: "100px",
         }}
       >
-        <div
-          style={{
-            color: "white",
-            fontSize: 20,
-            fontStyle: "normal",
-            letterSpacing: "-0.025em",
-            lineHeight: 1.4,
-            marginTop: 30,
-            padding: "0 120px",
-            whiteSpace: "pre-wrap",
-          }}
-        >
-          {status === "response"
-            ? state.state === "loading"
-              ? `Loading... with fname ${state.fname}`
-              : state.state === "displayFriends"
-              ? friends
-              : nfts
-            : "Welcome!"}
-        </div>
+        {status !== "response" && (
+          <div
+            style={{
+              display: "flex",
+              width: "92%",
+              flexDirection: "row",
+              flexWrap: "wrap",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            <p
+              style={{
+                color: "white",
+                fontSize: 75,
+                fontStyle: "normal",
+                letterSpacing: "-0.025em",
+                boxSizing: "border-box",
+                flexBasis: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              Hot Stuff
+            </p>
+            <p
+              style={{
+                color: "white",
+                fontSize: 40,
+                fontStyle: "normal",
+                letterSpacing: "-0.025em",
+                boxSizing: "border-box",
+                flexBasis: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              Trending mints based on your social graph
+            </p>
+          </div>
+        )}
+        {status === "response" && state.state === "loading" && (
+          <p
+            style={{
+              color: "white",
+              fontSize: 30,
+              fontStyle: "normal",
+              letterSpacing: "-0.025em",
+              lineHeight: 1.4,
+              marginTop: 30,
+              padding: "0 120px",
+              whiteSpace: "pre-wrap",
+            }}
+          >
+            {`Gathering your data, ${state.fname}... Press check in a few seconds`}
+          </p>
+        )}
+        {status === "response" && state.state === "displayFriends" && (
+          <div
+            style={{
+              display: "flex",
+              width: "92%",
+              flexDirection: "row",
+              flexWrap: "wrap",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            <p
+              style={{
+                color: "white",
+                fontSize: 60,
+                fontStyle: "normal",
+                letterSpacing: "-0.025em",
+                boxSizing: "border-box",
+                flexBasis: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              Your homies
+            </p>
+            {friends.split("\n").map((friend) => (
+              <div
+                style={{
+                  color: "white",
+                  fontSize: 30,
+                  fontStyle: "normal",
+                  letterSpacing: "-0.025em",
+                  boxSizing: "border-box",
+                  flexBasis: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  textAlign: "center",
+                }}
+              >
+                {friend}
+              </div>
+            ))}
+          </div>
+        )}
+        {status === "response" && state.state === "viewNFTs" && (
+          <div
+            style={{
+              display: "flex",
+              width: "92%",
+              flexDirection: "row",
+              flexWrap: "wrap",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            <p
+              style={{
+                color: "white",
+                fontSize: 60,
+                fontStyle: "normal",
+                letterSpacing: "-0.025em",
+                boxSizing: "border-box",
+                flexBasis: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              24 hr NFT Trades
+            </p>
+            {nfts.split("\n").map((friend) => (
+              <div
+                style={{
+                  color: "white",
+                  fontSize: 30,
+                  fontStyle: "normal",
+                  letterSpacing: "-0.025em",
+                  boxSizing: "border-box",
+                  flexBasis: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  textAlign: "center",
+                }}
+              >
+                {friend}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     ),
     intents: intentOptions[status === "response" ? state.options : 0],
@@ -266,3 +399,14 @@ devtools(app, { serveStatic });
 
 export const GET = handle(app);
 export const POST = handle(app);
+
+/**
+ * 
+ * 
+ * 
+ *           {state.state === "loading"
+            ? `Loading... with fname ${state.fname}`
+            : state.state === "displayFriends"
+            ? friends
+            : nfts}
+ */
